@@ -1,0 +1,37 @@
+version: '2.1'
+services:
+  postgres:
+    image: postgres:10
+    container_name: greendata-postgres
+    hostname: postgres
+    environment:
+      - POSTGRES_PASSWORD=b93uBESRp0zEE0TK
+      - POSTGRES_USER=postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - greendata-network
+  app:
+    container_name: greendata-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: greendata-app:latest
+    ports:
+      - 8080:8080
+    expose:
+      - 8080
+    networks:
+      - greendata-network
+    depends_on:
+      - postgres
+    environment:
+      WAIT_HOSTS: postgres:5432
+      WAIT_HOSTS_TIMEOUT: 300
+      WAIT_SLEEP_INTERVAL: 5
+
+networks:
+  greendata-network:
+    driver: bridge

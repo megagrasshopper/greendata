@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    database:
+      host: 127.0.0.1
+      port: 5432
+      name: bank
+  jpa:
+    show-sql: true
